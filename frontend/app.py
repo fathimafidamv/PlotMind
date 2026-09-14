@@ -9,7 +9,6 @@ import os
 
 load_dotenv()
 BACKEND_URL = os.getenv("Backend_url")
-
 st.title("PlotMind 📈 ")
 st.caption("Function ploting AI assistant")
 
@@ -31,16 +30,30 @@ if query:
     st.chat_message("user",avatar="🐧").markdown(query)
 
     with st.spinner("please wait..."):
-        BACKEND_URL="http://127.0.0.1:8000"
-        url = f"{BACKEND_URL}/Plot"
-        response = requests.post(
-            f"{BACKEND_URL}/Plot",
-            json={"query":query}
-        )
+        BACKEND_URL="https://plotmind.onrender.com"
+        try:
+            response = requests.post(
+                f"{BACKEND_URL}/Plot",
+                json={"query":query},
+                timeout=20,
+            )
+            response.raise_for_status()
+            result = response.json()
+        except requests.RequestException as error:
+            st.error(f"Could not reach the plotting backend: {error}")
+            result = None
+        except ValueError:
+            st.error("The plotting backend returned invalid JSON.")
+            result = None
 
-        result = response.json()
-        if "error" in result:
+        if result is not None:
+            st.json(result)
+        required_fields = {"function", "x_min", "x_max", "x_value", "y_value"}
+        if isinstance(result, dict) and "error" in result:
             st.error(result["error"])
+        elif not isinstance(result, dict) or not required_fields.issubset(result):
+            if result is not None:
+                st.error("The plotting backend returned an unexpected response.")
         else:
             st.chat_message("assistant",  avatar="👩‍🏫").markdown(
                f"y ={ result['function']} ,\n"
