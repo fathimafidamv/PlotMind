@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from backend.plot import generate_plot
-from backend.model import PlotRequest
+from plot import generate_plot
+from model import PlotRequest
 
 app = FastAPI(title="PlotMind API")
 
