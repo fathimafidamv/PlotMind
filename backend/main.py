@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from plot import generate_plot
-from model import PlotRequest
+from langchain_groq import ChatGroq
+from agent import agent
+from model import ChatRequest
 
 app = FastAPI(title="PlotMind API")
 
@@ -10,13 +11,23 @@ def get_home():
         "message":"PlotMind API is running"
     }
 
-@app.post("/Plot")
-def plot_graph(request: PlotRequest):   
+@app.post("/chat")
+def chat(request: ChatRequest):   
     try:
-        data = generate_plot(request.query)
-
-    
-        return data 
+        response = agent.invoke(
+            {
+                "messages":[
+                    {
+                        "role":"user",
+                        "content":request.query
+                    }
+                ]
+            }
+        )
+        final_message  = response["messages"][-1]
+        return {
+            "answer":final_message.content
+        }
     except Exception as e:
         print(f"error bcz { e }")
         return {
