@@ -4,7 +4,7 @@ from model import PlotRequest
 from plot import generate_plot
 
 app = FastAPI(title="PlotMind API")
-llm = ChatGroq(model="openai/gpt-oss-120b")
+
 
 @app.get("/")
 def get_home():
