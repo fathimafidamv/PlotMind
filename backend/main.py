@@ -13,7 +13,7 @@ def get_home():
     }
 
 @app.post("/Plot")
-def chat(request: PlotRequest):   
+def plot(request: PlotRequest):   
     try:
        data = generate_plot(request.query)
        return data
