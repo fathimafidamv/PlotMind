@@ -33,7 +33,7 @@ if query:
         BACKEND_URL="https://plotmind.onrender.com"
         try:
             response = requests.post(
-                f"{BACKEND_URL}/Plot",
+                f"{BACKEND_URL}/chat",
                 json={"query":query},
                 timeout=20,
             )
