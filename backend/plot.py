@@ -9,7 +9,6 @@ from langchain_core.tools import tool
 load_dotenv()
 llm = ChatGroq(model="openai/gpt-oss-120b")
 
-@tool
 def generate_plot(query:str):
     prompt="""
     Generate graph data for a mathematical function.
