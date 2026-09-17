@@ -4,12 +4,11 @@ import json
 from dotenv import load_dotenv
 
 from langchain_groq import ChatGroq
-from langchain_core.tools import tool
 
 load_dotenv()
 llm = ChatGroq(model="openai/gpt-oss-120b")
 
-def generate_plot(query:str):
+def generate_plot(function:str):
     prompt="""
     Generate graph data for a mathematical function.
     You are a mathematical plotting assistant. 
